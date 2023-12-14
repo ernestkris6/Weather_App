@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Getting 
 Tells the weather condition in various locations. 
 Tells about the tempertature, humidity, windspeed, rainfall etc.
 Weather information is generated via openweather api.
