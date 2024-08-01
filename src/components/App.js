@@ -21,6 +21,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  secondsRemaining: 10,
 
 }
 
@@ -62,6 +63,21 @@ function reducer(state, action){
       ...state,
       status: "finished",
       highscore: state.points > state.highscore ? state.points : state.highscore
+    }
+    // case 'restart': 
+    // return {
+    //   ...state,
+    //   points: 0,
+    //   highscore: 0,
+    //   index: 0,
+    //   answer: null,
+    //   status: "ready",
+
+    // }
+
+    case "tick": 
+    return{
+
     }
     default: throw new Error('Unknown action')
   } 
@@ -105,8 +121,9 @@ function App() {
           question={questions[index]} 
           dispatch={dispatch} 
           answer={answer} />
+
           <Footer>
-            <Timer />
+          <Timer dispatch={dispatch} />
           <NextButton 
           dispatch={dispatch} 
           answer={answer}
@@ -115,6 +132,7 @@ function App() {
           />
           </Footer>
           </>)}
+
           {status === 'finished' && (
           <FinishedScreen 
           maxPossiblePoints={maxPossiblePoints} 
