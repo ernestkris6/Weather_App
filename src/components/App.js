@@ -95,7 +95,12 @@ function App() {
           question={questions[index]} 
           dispatch={dispatch} 
           answer={answer} />
-          <NextButton dispatch={dispatch} answer={answer} />
+          <NextButton 
+          dispatch={dispatch} 
+          answer={answer}
+          index={index}
+          numQuestions={numQuestions}
+           />
           </>}
           {status === 'finished' && <FinishedScreen maxPossiblePoints={maxPossiblePoints} points={points} />}
       </Main>
