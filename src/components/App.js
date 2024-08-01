@@ -11,6 +11,7 @@ import FinishedScreen from './FinishedScreen';
 import Footer from './Footer';
 import Timer from './Timer';
 
+const SECS_PER_QUESTION = 0;
 
 const initialState = {
   questions: [],
@@ -21,7 +22,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
-  secondsRemaining: 10,
+  secondsRemaining: null,
 
 }
 
@@ -43,7 +44,8 @@ function reducer(state, action){
     case 'start': 
     return{
       ...state, 
-      status: "active"
+      status: "active",
+      secondsRemaining: state.questions.length * SECS_PER_QUESTION,
     }
     case 'newAnswer':
       const question = state.questions.at(state.index)
@@ -61,7 +63,7 @@ function reducer(state, action){
     case 'finish': 
     return{
       ...state,
-      status: "finished",
+      status: "finish",
       highscore: state.points > state.highscore ? state.points : state.highscore
     }
     // case 'restart': 
@@ -77,7 +79,9 @@ function reducer(state, action){
 
     case "tick": 
     return{
-
+      ...state,
+      secondsRemaining: state.secondsRemaining - 1,
+      status: state.secondsRemaining === 0 ? "finish" : state.status,
     }
     default: throw new Error('Unknown action')
   } 
@@ -85,7 +89,7 @@ function reducer(state, action){
 
 function App() {
 
-  const [{questions, status, index, answer, points, highscore}, dispatch] = useReducer(reducer, initialState);
+  const [{questions, status, index, answer, points, highscore, secondsRemaining}, dispatch] = useReducer(reducer, initialState);
   
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)
@@ -123,7 +127,7 @@ function App() {
           answer={answer} />
 
           <Footer>
-          <Timer dispatch={dispatch} />
+          <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
           <NextButton 
           dispatch={dispatch} 
           answer={answer}
@@ -133,11 +137,12 @@ function App() {
           </Footer>
           </>)}
 
-          {status === 'finished' && (
+          {status === 'finish' && (
           <FinishedScreen 
           maxPossiblePoints={maxPossiblePoints} 
           points={points}
-          highscore={highscore} />)}
+          highscore={highscore}
+          dispatch={dispatch} />)}
       </Main>
     </div>
   )
