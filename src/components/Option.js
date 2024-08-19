@@ -18,6 +18,7 @@ export default function Option({question, dispatch, answer}) {
       onClick={()=> dispatch({type: 'newAnswer', payload: index})}>{option}
       </button>
     ))}
-  </div></div>
+        </div>
+  </div>
   )
 }
