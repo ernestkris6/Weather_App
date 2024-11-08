@@ -97,7 +97,7 @@ function App() {
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)*/
 
-  const {questions, status, index, answer, points, highscore, secondsRemaining,numQuestions, maxPossiblePoints, dispatch} = useQuiz();
+  const {status} = useQuiz();
  
 
   // useEffect(function() {
@@ -119,19 +119,14 @@ function App() {
           {status === 'ready' && <StartScreen />}
           {status === 'active' && ( 
           <>
-          <Question 
-          // question={questions[index]} 
-          // dispatch={dispatch} 
-          // answer={answer} 
-          />
-
+          <Question />
           <Footer>
-          <Timer />
-          <NextButton />
+            <Timer />
+            <NextButton />
           </Footer>
           </>)}
 
-          {status === 'finish' && (
+          {status === 'finished' && (
           <FinishedScreen 
           />)}
       </Main>

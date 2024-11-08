@@ -57,10 +57,10 @@ function reducer(state, action){
                 answer: null,
             }
         
-        case 'finish':
+        case 'finished':
             return{
                 ...state,
-                status: 'finish',
+                status: 'finished',
                 //returning points gained : 0
                 highScore: state.points > state.highScore ? state.points : state.highScore
             }
@@ -69,7 +69,7 @@ function reducer(state, action){
             return{
                 ...state,
                 secondsRemaining: state.secondsRemaining - 1,
-                status: state.secondsRemaining === 0 ? 'finish' : "state.status",
+                status: state.secondsRemaining === 0 ? 'finished' : "state.status",
         }
 
         default: throw new Error("Unknown action...")
@@ -92,10 +92,12 @@ const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)
         .then((res) => res.json())
         .then((data) => dispatch({type: 'dataReceived', payload: data}))
         .catch((err) => dispatch({type: 'dataFailed'}))
-    })
+    }, [])
 
 
-    const value={status, 
+    const value={
+        questions,
+        status, 
         index, 
         answer, 
         points, 
@@ -103,12 +105,15 @@ const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)
         secondsRemaining, 
         numQuestions,
         maxPossiblePoints,
-        dispatch}
+
+        dispatch,}
 
 
-    return <QuizContext.Provider value={value}>
+    return (
+    <QuizContext.Provider value={value}>
         {children}
     </QuizContext.Provider>
+    )
 }
 
 
@@ -116,9 +121,9 @@ const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)
 
 function useQuiz(){
     const context = useContext(QuizContext);
-    if(context === undefined) throw new Error('Context was used outside quizcontext components.')
+    if(context === undefined) throw new Error('quizContext was used outside quizcontext provider.')
         return context;
 
 }
 
-export {useQuiz, QuizProvider}
+export {QuizProvider, useQuiz};
