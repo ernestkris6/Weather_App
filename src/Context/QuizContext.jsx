@@ -31,7 +31,7 @@ function reducer(state, action){
         case 'dataFailed':
             return{
                 ...state,
-                status: "error"
+                status: "error",
             }
         
         case 'start':
@@ -43,7 +43,7 @@ function reducer(state, action){
             }
         
         case 'newAnswer': 
-            const question = state.question.at(state.index)
+            const question = state.questions.at(state.index)
             return{
                 ...state,
                 answer: action.payload,
@@ -57,19 +57,25 @@ function reducer(state, action){
                 answer: null,
             }
         
-        case 'finished':
+        case 'finish':
             return{
                 ...state,
                 status: 'finished',
                 //returning points gained : 0
                 highScore: state.points > state.highScore ? state.points : state.highScore
             }
+        
+        case 'restart': 
+                return { 
+                    ...initialState, 
+                    questions: state.questions, 
+                    status: "ready" }
 
         case 'tick': 
             return{
                 ...state,
                 secondsRemaining: state.secondsRemaining - 1,
-                status: state.secondsRemaining === 0 ? 'finished' : "state.status",
+                status: state.secondsRemaining === 0 ? 'finished' : state.status,
         }
 
         default: throw new Error("Unknown action...")
