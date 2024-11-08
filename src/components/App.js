@@ -97,7 +97,7 @@ function App() {
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)*/
 
-  const {questions, status, index, answer, points, highscore, secondsRemaining} = useQuiz();
+  const {questions, status, index, answer, points, highscore, secondsRemaining,numQuestions, maxPossiblePoints, dispatch} = useQuiz();
  
 
   // useEffect(function() {
@@ -112,42 +112,28 @@ function App() {
     <div className='app'>
       <Header />
       <Main>
-        <Progress 
-        index={index} 
-        numQuestions={numQuestions} 
-        points={points}
-        maxPossiblePoints={maxPossiblePoints}
-        answer={answer}
-        />
+        <Progress />
 
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
-          {status === 'ready' && 
-          <StartScreen dispatch={dispatch} numQuestions={numQuestions}/>}
+          {status === 'ready' && <StartScreen />}
           {status === 'active' && ( 
           <>
           <Question 
-          question={questions[index]} 
-          dispatch={dispatch} 
-          answer={answer} />
+          // question={questions[index]} 
+          // dispatch={dispatch} 
+          // answer={answer} 
+          />
 
           <Footer>
-          <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
-          <NextButton 
-          dispatch={dispatch} 
-          answer={answer}
-          index={index}
-          numQuestions={numQuestions}
-          />
+          <Timer />
+          <NextButton />
           </Footer>
           </>)}
 
           {status === 'finish' && (
           <FinishedScreen 
-          maxPossiblePoints={maxPossiblePoints} 
-          points={points}
-          highscore={highscore}
-          dispatch={dispatch} />)}
+          />)}
       </Main>
     </div>
   )
