@@ -10,8 +10,9 @@ import Progress from './Progress';
 import FinishedScreen from './FinishedScreen';
 import Footer from './Footer';
 import Timer from './Timer';
+import { useQuiz } from '../Context/QuizContext';
 
-const SECS_PER_QUESTION = 20;
+/* const SECS_PER_QUESTION = 20;
 
 const initialState = {
   questions: [],
@@ -87,20 +88,24 @@ function reducer(state, action){
   } 
 }
 
+*/
+
 function App() {
 
-  const [{questions, status, index, answer, points, highscore, secondsRemaining}, dispatch] = useReducer(reducer, initialState);
+  /*const [{questions, status, index, answer, points, highscore, secondsRemaining}, dispatch] = useReducer(reducer, initialState);
   
   const numQuestions = questions.length;
-  const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)
+  const maxPossiblePoints = questions.reduce((prev, cur)=> prev + cur.points, 0)*/
+
+  const {questions, status, index, answer, points, highscore, secondsRemaining} = useQuiz();
  
 
-  useEffect(function() {
-    fetch('http://localhost:9000/questions')
-    .then((res)=> res.json())
-    .then((data)=> dispatch({type: "dataReceived", payload: data}))
-    .catch((err)=> dispatch({type: "dataFailed"}))
-  }, [])
+  // useEffect(function() {
+  //   fetch('http://localhost:9000/questions')
+  //   .then((res)=> res.json())
+  //   .then((data)=> dispatch({type: "dataReceived", payload: data}))
+  //   .catch((err)=> dispatch({type: "dataFailed"}))
+  // }, [])
   
   
   return (

@@ -17,6 +17,8 @@ const initialState = {
 }
 
 const BASE_URL = 'http://localhost:9000'
+const SECS_PER_QUESTION = 20;
+
 
 function reducer(state, action){
     switch(action.type){
@@ -37,15 +39,16 @@ function reducer(state, action){
             return{
                 ...state,
                 status: 'active',
-                questions: action.payload,
+                secondsRemaining: state.questions.length * SECS_PER_QUESTION,
 
             }
         
         case 'newAnswer': 
+            const question = state.question.at(state.index)
             return{
                 ...state,
                 answer: action.payload,
-                points: action.payload,
+                points: action.payload === question.correctOption ? state.points + question.points : state.points,
             }
         
         case 'nextQuestion':
@@ -59,7 +62,18 @@ function reducer(state, action){
             return{
                 ...state,
                 status: 'finish',
+                //returning points gained : 0
+                highScore: state.points > state.highScore ? state.points : state.highScore
             }
+
+        case 'tick': 
+            return{
+                ...state,
+                secondsRemaining: state.secondsRemaining - 1,
+                status: state.secondsRemaining === 0 ? 'finish' : "state.status",
+        }
+
+        default: throw new Error("Unknown action...")
     }
 
         
@@ -79,7 +93,16 @@ const [{status, index, answer, points, highScore, secondsRemaining}, dispatch] =
     })
 
 
-    return <QuizContext.Provider>
+    const value={status, 
+        index, 
+        answer, 
+        points, 
+        highScore, 
+        secondsRemaining, 
+        dispatch}
+
+
+    return <QuizContext.Provider value={value}>
         {children}
     </QuizContext.Provider>
 }
@@ -89,7 +112,7 @@ const [{status, index, answer, points, highScore, secondsRemaining}, dispatch] =
 
 function useQuiz(){
     const context = useContext(QuizContext);
-    if(context === undefined) throw new Error('Context was used outside context components.')
+    if(context === undefined) throw new Error('Context was used outside quizcontext components.')
         return context;
 
 }
